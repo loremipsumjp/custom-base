@@ -1,0 +1,111 @@
+extends ../layouts/two-column
+include ../mixins/summary
+include ../mixins/pagination
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../') ホーム
+      li ユーザ一覧
+
+    h1.page-header ユーザ一覧
+
+    .panel.panel-default
+      .panel-heading 検索条件
+      .panel-body
+        form
+          .form-group
+            label.control-label(for='q') キーワード
+            input.form-control(type='text', name='q', id='q', v-model='self.form.q')
+          button.btn.btn-primary(type='submit', v-on:click='onClickSearch') 検索
+
+    .panel.panel-default
+      .panel-heading 並べ替え条件
+      .panel-body
+        .form-group
+          select.form-control(name='sort', id='sort', v-model='self.form.sort', v-on:change='onChangeSort')
+            option(value='{"kana":1}') 氏名の五十音順
+            option(value='{"username":1}') ユーザ名のA-Z順
+
+    +summary
+
+    .text-right
+      a.btn.btn-primary(href='./add/') 新規登録
+
+    +pagination
+
+    table.table
+      thead
+        tr
+          th #
+          th 権限
+          th 氏名
+          th ユーザ名
+          th 操作
+      tbody
+        tr(v-for='(i, resource) in self.resources')
+          td {{ self.limit * (self.page - 1) + i + 1 }}
+          td {{ resource.profile.name }}
+          td {{ resource.name }}
+          td {{ resource.username }}
+          td
+            a.btn.btn-info.btn-xs(href='./{{ resource._id }}/') 詳細
+            | 
+            a.btn.btn-warning.btn-xs(href='./{{ resource._id }}/edit/') 修正
+            | 
+            a.btn.btn-danger.btn-xs(href='./{{ resource._id }}/delete/') 削除
+            | 
+            .btn-group
+              button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+              ul.dropdown-menu
+                li
+                  a(href='./{{ resource._id }}/copy/') コピーして新規登録
+
+    +pagination
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') ホームへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var IndexPage = window.components.page.IndexPage;
+
+      new IndexPage().initialize({
+        url: '#{baseUrl}/private/api/v1/users',
+        search: { keyword: { targets: ['name', 'kana', 'username'] } },
+        sort: { default: '{"kana":1}' },
+      })
+        .then(function (component) {
+          return Promise.all(component.resources.map(function (resource) {
+            return axios.get('#{baseUrl}/private/api/v1/profiles/' + resource.profileId)
+              .then(function (response) {
+                resource.profile = response.data;
+
+                return resource;
+              });
+          }))
+            .then(function (resources) {
+              component.resources = resources;
+
+              var vm = new Vue(component.getVueOptions({
+                template: document.getElementById('template-main').innerText
+              }));
+
+              vm.$mount('main');
+            });
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

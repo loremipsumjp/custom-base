@@ -1,0 +1,27 @@
+mixin form
+  .panel.panel-default
+    .panel-heading 基本情報
+    .panel-body
+      .form-group
+        label.control-label(for='index') 番号
+        input.form-control(type='number', name='index', id='index', v-model='self.model.form.index')
+      .form-group(v-if='self.model.validation.index === false')
+        .alert.alert-info 番号を正しく入力してください
+      .form-group
+        label.control-label(for='name') 名称
+        input.form-control(type='text', name='name', id='name', v-model='self.model.form.name')
+      .form-group(v-if='self.model.validation.name === false')
+        .alert.alert-info 名称を入力してください
+      .form-group
+        label.control-label(for='key') キー
+        input.form-control(type='text', name='key', id='key', v-model='self.model.form.key')
+      .form-group(v-if='self.model.validation.key === false')
+        .alert.alert-info キーを正しく入力してください
+      .form-group
+        label.control-label(for='association') 関連
+        textarea.form-control(rows='10', type='text', name='association', id='association', v-model='self.model.form.association')
+      .form-group(v-if='self.model.validation.association === false')
+        .alert.alert-info 関連を正しく入力してください
+      .form-group
+        label.control-label(for='memo') メモ
+        textarea.form-control(rows='10', type='text', name='memo', id='memo', v-model='self.model.form.memo')

@@ -1,0 +1,33 @@
+doctype html
+html.no-js(lang='ja')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title Sales Base
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='stylesheet', href='/static/css/jquery-ui.css')
+    link(rel='stylesheet', href='/static/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/static/css/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='/static/css/screen.css')
+    block style
+    script(src='/static/js/vendor/modernizr-2.8.3.min.js')
+  body
+    nav.navbar.navbar-default.navbar-static-top
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') Sales Base
+        block header
+
+    .container
+      block content
+    hr
+    footer
+      .container
+        p &copy; Lorem Ipsum Co. Ltd. 2016
+    script(src='/static/js/vendor/jquery-1.11.2.min.js')
+    script(src='/static/js/vendor/jquery-ui.min.js')
+    script(src='/static/js/vendor/bootstrap.min.js')
+    script(src='/static/js/vendor/ejs.min.js')
+    script(src='/static/js/bundle.js')
+    block script

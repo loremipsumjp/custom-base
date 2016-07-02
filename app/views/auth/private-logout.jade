@@ -1,0 +1,33 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li.active ログアウト
+    h1.page-header ログアウト
+    p ログアウトするには「ログアウトを実行する」ボタンをクリックしてください
+
+    form
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') ログアウトを実行する
+        a.btn.btn-default(href='../../') ホームへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var LogoutForm = window.components.LogoutForm;
+
+      var component = new LogoutForm();
+      var vm = new Vue(component.getVueOptions({
+        template: document.getElementById('template-main').innerText
+      }));
+
+      vm.$mount('main');
+    })();

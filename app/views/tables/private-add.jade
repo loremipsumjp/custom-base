@@ -1,0 +1,49 @@
+extends ../layouts/two-column
+include ./mixins/form
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../') ホーム
+      li
+        a(href='../../') テーブル一覧
+      li.active テーブルの新規登録
+
+    h1.page-header テーブルの新規登録
+
+    form
+      +form
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で登録する
+        a.btn.btn-default(href='../../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var FormPage = window.components.page.FormPage;
+      var TableModel = window.models.TableModel;
+
+      new FormPage().initialize({
+        ModelClass: TableModel,
+        method: 'POST',
+        url: '#{baseUrl}/private/api/v1/tables',
+        redirect: '../{{ id }}/',
+      })
+        .then(function (component) {
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

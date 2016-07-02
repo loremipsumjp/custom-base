@@ -1,0 +1,43 @@
+form
+  .panel.panel-default
+    .panel-heading カラムの追加
+    .panel-body
+      .form-group
+        label.control-label(for='tableKey') テーブル
+        select.form-control(name='tableKey', id='tableKey', v-model='self.form.tableKey')
+          option(value='') - クリックして選択 -
+          option(value='{{ table.key }}', v-for='table in self.tables') {{ table.name }}
+      .form-group(v-if='self.validation.tableKey === false')
+        .alert.alert-info テーブルを選んでください
+      .form-group
+        label.control-label(for='name') 名称
+        input.form-control(name='name', id='name', v-model='self.form.name')
+      .form-group(v-if='self.validation.name === false')
+        .alert.alert-info 名称を入力してください
+      .form-group
+        label.control-label(for='key') キー
+        input.form-control(name='key', id='key', v-model='self.form.key')
+      .form-group(v-if='self.validation.key === false')
+        .alert.alert-info キーを入力してください
+      .form-group
+        label.control-label(for='dataType') データ型
+        select.form-control(name='dataType', id='dataType', v-model='self.form.dataType')
+          option(value='') - クリックして選択 -
+          option(value='number') 数値
+          option(value='string') 文字列
+      .form-group(v-if='self.validation.dataType === false')
+        .alert.alert-info データ型を選んでください
+      .form-group
+        label.control-label(for='formType') フォーム型
+        select.form-control(name='formType', id='formType', v-model='self.form.formType')
+          option(value='') - クリックして選択 -
+          option(value='text') テキスト
+          option(value='textarea') テキストエリア
+          option(value='date') 日付
+          option(value='file') ファイル
+      .form-group(v-if='self.validation.formType === false')
+        .alert.alert-info フォーム型を選んでください
+
+  .clearfix
+    button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で追加する
+    a.btn.btn-default(href='../') 一覧ページへ戻る

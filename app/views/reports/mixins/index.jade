@@ -1,0 +1,27 @@
+mixin main
+  ol.breadcrumb
+    li
+      a(href='../') ホーム
+    li レポート一覧
+
+  h1.page-header レポート一覧
+
+  table.table
+    thead
+      tr
+        th #
+        th 名称
+        th 操作
+    tbody
+      - for (var i = 1; i <= 20; i += 1)
+        tr
+          td #{i}
+          td ここに名称が入ります
+          td
+            a.btn.btn-info.btn-xs(href='./1/') 詳細
+
+  hr
+
+  .row
+    .col-xs-offset-3.col-xs-6
+      a.btn.btn-default.btn-block(href='../') ホームへ戻る

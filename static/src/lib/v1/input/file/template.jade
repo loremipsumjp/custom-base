@@ -1,0 +1,6 @@
+if self.value
+  .checkbox
+    label
+      input(type='checkbox', v-model='#{self.path}.change')
+      | ファイルを変更する
+input.form-control(type='file', name=self.key, id=self.key, v-show='#{self.path}.change === true')

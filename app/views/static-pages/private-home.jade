@@ -1,0 +1,33 @@
+extends ../layouts/two-column
+
+block main
+  main 読み込み中...
+
+block script
+  script(src='https://www.gstatic.com/charts/loader.js')
+  script.
+    (function () {
+      'use strict';
+  
+      var _ = window._;
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('/private/api/v1/profiles/#{profile._id}')
+        .then(function (response) {
+          var page = response.data;
+          var PageClass = _.get(window, page.className);
+
+          return new PageClass().initialize(page.classData);
+        })
+        .then(function (component) {
+          return component.getVueOptions();
+        })
+        .then(function (options) {
+          var vm = new Vue(options);
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack);
+        });
+    })();

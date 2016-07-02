@@ -1,0 +1,214 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li
+        a(href='../') テーブル一覧
+      li.active テーブルの詳細
+
+    h1.page-header テーブルの詳細
+
+    p.text-right
+      a.btn.btn-warning(href='./edit/') 修正
+      | 
+      a.btn.btn-danger(href='./delete/') 削除
+
+    p.text-right
+      a.btn.btn-default(href='./copy/') コピーして新規登録
+
+    .panel.panel-default
+      .panel-heading 基本情報
+      .panel-body
+        table.table
+          tbody
+            tr
+              th 番号
+              td {{ resource.index }}
+            tr
+              th 名称
+              td {{ resource.name }}
+            tr
+              th キー
+              td {{ resource.key }}
+            tr
+              th メモ
+              td
+                div(v-for='line in resource.memoLines') {{ line }}
+
+    hr
+
+    h2 カラム
+
+    p.text-right
+      a.btn.btn-primary(href='./columns/add/') カラムの新規登録
+
+    .panel.panel-default
+      .panel-heading カラム一覧
+      .panel-body 
+        table.table
+          thead
+            tr
+              th 番号
+              th 名称
+              th キー
+              th 種別
+              th 操作
+          tbody
+            tr(v-for='column in resource.columns')
+              td {{ column.index }}
+              td {{ column.name }}
+              td {{ column.key }}
+              td
+                span(v-if="column.type === 'number'") 数値
+                span(v-if="column.type === 'string'") 文字列
+                span(v-if="column.type === 'array'") 配列
+                span(v-if="column.type === 'object'") オブジェクト
+                span(v-if="column.type === 'id'") ID
+              td
+                a.btn.btn-info.btn-xs(href='./columns/{{ column._id }}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='./columns/{{ column._id }}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='./columns/{{ column._id }}/delete/') 削除
+                | 
+                .btn-group
+                  button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                  ul.dropdown-menu
+                    li
+                      a(href='./columns/{{ column._id }}/copy/') コピーして新規登録
+
+    hr
+
+    h2 ページ
+
+    p.text-right
+      a.btn.btn-primary(href='./pages/add/') ページの新規登録
+
+    .panel.panel-default
+      .panel-heading ページ一覧
+      .panel-body 
+        table.table
+          thead
+            tr
+              th 番号
+              th 名称
+              th キー
+              th 操作
+          tbody
+            tr(v-for='page in resource.pages')
+              td {{ page.index }}
+              td {{ page.name }}
+              td {{ page.key }}
+              td
+                a.btn.btn-info.btn-xs(href='./pages/{{ page._id }}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='./pages/{{ page._id }}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='./pages/{{ page._id }}/delete/') 削除
+                | 
+                .btn-group
+                  button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                  ul.dropdown-menu
+                    li
+                      a(href='./pages/{{ page._id }}/copy/') コピーして新規登録
+
+    hr
+
+    h2 帳票
+
+    p.text-right
+      a.btn.btn-primary(href='./formats/add/') 帳票の新規登録
+
+    .panel.panel-default
+      .panel-heading 帳票一覧
+      .panel-body 
+        table.table
+          thead
+            tr
+              th 番号
+              th 名称
+              th キー
+              th 操作
+          tbody
+            tr(v-for='format in resource.formats')
+              td {{ format.index }}
+              td {{ format.name }}
+              td {{ format.key }}
+              td
+                a.btn.btn-info.btn-xs(href='./formats/{{ format._id }}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='./formats/{{ format._id }}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='./formats/{{ format._id }}/delete/') 削除
+                | 
+                .btn-group
+                  button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                  ul.dropdown-menu
+                    li
+                      a(href='./formats/{{ format._id }}/copy/') コピーして新規登録
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      Promise.all([
+        axios.get('#{baseUrl}/private/api/v1/tables/#{resource._id}'),
+        axios.get('#{baseUrl}/private/api/v1/columns', {
+          params: {
+            query: { tableId: '#{resource._id}' },
+            sort: { index: 1 }
+          }
+        }),
+        axios.get('#{baseUrl}/private/api/v1/pages', {
+          params: {
+            query: { tableId: '#{resource._id}' },
+            sort: { index: 1 }
+          }
+        }),
+        axios.get('#{baseUrl}/private/api/v1/formats', {
+          params: {
+            query: { tableId: '#{resource._id}' },
+            sort: { index: 1 }
+          }
+        })
+      ])
+        .then(function (results) {
+          const resource = results[0].data;
+          const columns = results[1].data;
+          const pages = results[2].data;
+          const formats = results[3].data;
+
+          resource.columns = columns
+          resource.pages = pages
+          resource.formats = formats
+          resource.memoLines = (typeof resource.memo === 'string' ? resource.memo : '')
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .split('\n');
+
+          var vm = new Vue({
+            data: { resource: resource },
+            template: document.getElementById('template-main').innerText
+          });
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

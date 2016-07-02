@@ -1,0 +1,121 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li
+        a(href='../') 権限一覧
+      li.active 権限の詳細
+
+    h1.page-header 権限の詳細
+
+    p.text-right
+      a.btn.btn-warning(href='./edit/') 修正
+      | 
+      a.btn.btn-danger(href='./delete/') 削除
+
+    p.text-right
+      a.btn.btn-default(href='./copy/') コピーして新規登録
+
+    .panel.panel-default
+      .panel-heading 基本情報
+      .panel-body
+        table.table
+          tbody
+            tr
+              th 番号
+              td {{ resource.index }}
+            tr
+              th 名称
+              td {{ resource.name }}
+            tr
+              th キー
+              td {{ resource.key }}
+            tr
+              th メモ
+              td
+                div(v-for='line in resource.memoLines') {{ line }}
+
+    hr
+
+    h2 ユーザ
+
+    p.text-right
+      a.btn.btn-primary(href='../../custom-objects/users/add/?profileId={{ resource._id }}') ユーザの新規登録
+
+    .panel.panel-default
+      .panel-heading ユーザ一覧
+      .panel-body 
+        table.table
+          thead
+            tr
+              th #
+              th 氏名
+              th ユーザ名
+              th 操作
+          tbody
+            tr(v-for='(i, user) in resource.users')
+              td {{ i + 1 }}
+              td {{ user.name }}
+              td {{ user.username }}
+              td
+                a.btn.btn-info.btn-xs(href='../../custom-objects/users/{{ user._id }}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='../../custom-objects/users/{{ user._id }}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='../../custom-objects/users/{{ user._id }}/delete/') 削除
+                | 
+                .btn-group
+                  button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                  ul.dropdown-menu
+                    li
+                      a(href='../../custom-objects/users/{{ user._id }}/copy/') コピーして新規登録
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      Promise.all([
+        axios.get('#{baseUrl}/private/api/v1/profiles/#{resource._id}'),
+        axios.get('#{baseUrl}/private/api/v1/custom-objects/users', {
+          params: {
+            query: { profileId: '#{resource._id}' },
+            sort: { index: 1 }
+          }
+        })
+      ])
+        .then(function (results) {
+          const resource = results[0].data;
+          const users = results[1].data;
+
+          resource.users = users
+          resource.memoLines = (typeof resource.memo === 'string' ? resource.memo : '')
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .split('\n');
+
+          var vm = new Vue({
+            data: { resource: resource },
+            template: document.getElementById('template-main').innerText
+          });
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

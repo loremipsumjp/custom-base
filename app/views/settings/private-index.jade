@@ -1,0 +1,76 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../') ホーム
+      li システム設定一覧
+
+    h1.page-header システム設定一覧
+
+    .panel.panel-default(v-for='settingCategory in settingCategories')
+      .panel-heading {{ settingCategory.text }}
+      .panel-body
+        table.table
+          thead
+            tr
+              th #
+              th 名称
+              th 操作
+          tbody
+            tr(v-for='resource in resourcesByCategory[settingCategory.value]')
+              td {{ resource.index }}
+              td {{ resource.name }}
+              td
+                a.btn.btn-warning.btn-xs(href='./{{ resource._id }}/edit/') 変更
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') ホームへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('#{baseUrl}/private/api/v1/settings', {
+        params: {
+          sort: { index: 1 }
+        }
+      })
+        .then(function (response) {
+          const resources = response.data;
+          const resourcesByCategory = resources.reduce(function (memo, resource) {
+            memo[resource.category] = memo[resource.category] || [];
+            memo[resource.category].push(resource);
+
+            return memo;
+          }, {});
+
+          const settingCategories = JSON.parse(resources.filter(function (resource) {
+            return resource.key === 'setting-categories';
+          })[0].value);
+
+          var vm = new Vue({
+            data: {
+              resources: resources,
+              resourcesByCategory: resourcesByCategory,
+              settingCategories: settingCategories
+            },
+            template: document.getElementById('template-main').innerText
+          });
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

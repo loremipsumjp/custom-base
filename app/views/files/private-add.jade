@@ -1,0 +1,56 @@
+extends ../layouts/two-column
+include ./mixins/form
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li
+        a(href='../') ファイル一覧
+      li.active ファイルの新規登録
+
+    h1.page-header ファイルの新規登録
+
+    form
+      +form
+
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で登録する
+        a.btn.btn-default(href='../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var FormPage = window.components.page.FormPage;
+      var FileModel = window.models.FileModel;
+
+      new FormPage().initialize({
+        ModelClass: FileModel,
+        method: 'POST',
+        url: '#{baseUrl}/private/api/v1/files',
+        redirect: '../{{ _id }}/'
+      })
+        .then(function (component) {
+          component.model.method = 'POST'
+
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText,
+
+            ready: function () {
+              component.model.form.file.input = document.getElementById('file');
+            }
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

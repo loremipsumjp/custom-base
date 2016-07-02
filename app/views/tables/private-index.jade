@@ -1,0 +1,74 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../') ホーム
+      li テーブル一覧
+
+    h1.page-header テーブル一覧
+
+    p.text-right
+      a.btn.btn-primary(href='./add/') 新規登録
+
+    table.table
+      thead
+        tr
+          th #
+          th 名称
+          th キー
+          th 操作
+      tbody
+        tr(v-for='(i, resource) in resources')
+          td {{ i + 1 }}
+          td {{ resource.name }}
+          td {{ resource.key }}
+          td
+            a.btn.btn-info.btn-xs(href='./{{ resource._id }}/') 詳細
+            | 
+            a.btn.btn-warning.btn-xs(href='./{{ resource._id }}/edit/') 修正
+            | 
+            a.btn.btn-danger.btn-xs(href='./{{ resource._id }}/delete/') 削除
+            | 
+            .btn-group
+              button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+              ul.dropdown-menu
+                li
+                  a(href='./{{ resource._id }}/copy/') コピーして新規登録
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') ホームへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('#{baseUrl}/private/api/v1/tables', {
+        params: {
+          sort: { index: 1 }
+        }
+      })
+        .then(function (response) {
+          const resources = response.data;
+
+          var vm = new Vue({
+            data: { resources: resources },
+            template: document.getElementById('template-main').innerText
+          });
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

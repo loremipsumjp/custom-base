@@ -1,0 +1,147 @@
+@charset "UTF-8";
+
+.section {
+  font-size: 9.5pt;
+}
+
+.hr {
+  margin-top: 4pt;
+  margin-bottom: 4pt;
+  border: 0;
+  border-top: 2.5pt solid #000;
+}
+
+.heading {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 16pt;
+  text-align: center;
+}
+
+.summary {
+  margin-top: 18pt;
+  margin-bottom: 18pt;
+}
+
+.summary-left {
+  width: 95%;
+  margin-right: auto;
+}
+
+.summary-left-account {
+  font-size: 11pt;
+  font-family: sans-serif;
+  border-bottom: 1.5pt solid #000
+}
+
+.summary-left-subject {
+  margin-top: 8pt;
+  font-size: 11pt;
+  font-family: sans-serif;
+  border-bottom: 1.5pt solid #000
+}
+
+.summary-left-message {
+  margin-top: 8pt;
+}
+
+.summary-left-point {
+  margin-top: 8pt;
+}
+
+.summary-left-total {
+  width: 60%;
+  margin-top: 8pt;
+  margin-right: auto;
+  border-top: 2.5pt solid #000;
+  border-bottom: 2.5pt solid #000;
+  text-align: center;
+}
+
+.summary-left-total-label {
+  padding-top: 2pt;
+  padding-bottom: 2pt;
+  border-bottom: 1.5pt solid #000;
+}
+
+.summary-left-total-content {
+  padding-top: 4pt;
+  padding-bottom: 4pt;
+  font-size: 16pt;
+}
+
+.summary-right {
+  width: 95%;
+  margin-left: auto;
+}
+
+.summary-right-date {
+  text-align: right;
+}
+
+.summary-right-name {
+  margin-top: 10pt;
+  font-size: 13pt;
+  font-weight: bold;
+  text-align: right;
+}
+
+.summary-right-address {
+  margin-top: 10pt;
+  font-size: 8.5pt;
+}
+
+.summary-right-president {
+  margin-top: 6pt;
+  text-align: right;
+}
+
+.summary-right-contact {
+  padding-left: 20mm;
+  margin-top: 6pt;
+  font-size: 9pt;
+}
+
+.summary-right-staff {
+  padding-left: 20mm;
+  margin-top: 12pt;
+  border-bottom: 1.5pt solid #000;
+}
+
+.detail {
+  margin-top: 18pt;
+}
+
+.detail-list {
+  width: 100%;
+  border: 1pt solid #000;
+  border-collapse: collapse;
+}
+
+.detail-list thead th {
+  padding: 1mm;
+  font-weight: normal;
+  border: 1pt solid #000;
+}
+
+.detail-list tbody td {
+  padding: 1mm;
+  border: 1pt solid #000;
+}
+
+.memo {
+  padding: 6pt;
+  margin-top: 18pt;
+  min-height: 25mm;
+  border: 1pt solid #000;
+}
+
+.memo-label {
+  width: 15mm;
+  border-bottom: 1pt solid #000;
+  text-align: center;
+}
+
+.memo-content {
+
+}

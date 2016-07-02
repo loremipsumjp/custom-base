@@ -1,0 +1,7 @@
+each row in rows
+  .row
+    each column in row.columns
+      div(class='col-xs-' + (12 / row.columns.length))
+        .panel.panel-default
+          .panel-heading #{column.panel.name}
+          .panel-body !{column.panel.chart.html}

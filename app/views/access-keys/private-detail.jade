@@ -1,0 +1,70 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../../') ホーム
+      li
+        a(href='../../../') ユーザ一覧
+      li
+        a(href='../../') ユーザの詳細
+      li.active アクセスキーの詳細
+
+    h1.page-header アクセスキーの詳細
+
+    p.text-right
+      a.btn.btn-warning(href='./edit/') 修正
+      | 
+      a.btn.btn-danger(href='./delete/') 削除
+
+    table.table
+      tbody
+        tr
+          th アクセスキーID
+          td {{ resource.accessKeyId }}
+        tr
+          th 秘密アクセスキー
+          td (非表示)
+        tr
+          th 状態
+          td(v-if="resource.status === 'active'") 有効
+          td(v-if="resource.status === 'inactive'") 無効
+        tr
+          th 備考
+          td
+            div(v-for='line in resource.memoLines') {{ line }}
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../../') ユーザ詳細へ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('#{baseUrl}/private/api/v1/access-keys/#{resource._id}')
+        .then(function (response) {
+          const resource = response.data;
+
+          resource.memoLines = (typeof resource.memo === 'string' ? resource.memo : '').split('\n');
+
+          var vm = new Vue({
+            data: { resource: resource },
+            template: document.getElementById('template-main').innerText
+          });
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

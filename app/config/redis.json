@@ -1,0 +1,8 @@
+{
+  "development": {
+    "prefix": "sess:sales-base:"
+  },
+  "production": {
+    "prefix": "sess:sales-base:"
+  }
+}

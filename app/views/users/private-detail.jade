@@ -1,0 +1,121 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li
+        a(href='../') ユーザ一覧
+      li.active ユーザの詳細
+
+    h1.page-header ユーザの詳細
+
+    p.text-right
+      a.btn.btn-warning(href='./edit/') 修正
+      | 
+      a.btn.btn-danger(href='./delete/') 削除
+
+    p.text-right
+      a.btn.btn-default(href='./copy/') コピーして新規登録
+
+    .panel.panel-default
+      .panel-heading 基本情報
+      .panel-body
+        table.table
+          tbody
+            tr
+              th 番号
+              td {{ resource.index }}
+            tr
+              th 種別
+              td {{ resource.profile.name }}
+            tr
+              th ユーザ名
+              td {{ resource.username }}
+            tr
+              th パスワード
+              td (非表示)
+            tr
+              th 氏名
+              td {{ resource.name }}
+            tr
+              th 氏名(カタカナ)
+              td {{ resource.kana }}
+            tr
+              th 備考
+              td
+                div(v-for='line of resource.memoLines') {{ line }}
+
+    hr
+
+    h2 アクセスキー
+
+    p.text-right
+      a.btn.btn-primary(href='./access-keys/generate/') アクセスキーの生成
+
+    .panel.panel-default
+      .panel-heading アクセスキー一覧表
+      .panel-body
+        table.table
+          thead
+            tr
+              th #
+              th アクセスキーID
+              th 状態
+              th 操作
+          tbody
+            tr(v-for='(i, accessKey) in resource.accessKeys')
+              td {{ i + 1 }}
+              td {{ accessKey.accessKeyId }}
+              td(v-if="accessKey.status === 'active'") 有効
+              td(v-if="accessKey.status === 'inactive'") 無効
+              td
+                a.btn.btn-info.btn-xs(href='./access-keys/{{ accessKey._id }}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='./access-keys/{{ accessKey._id }}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='./access-keys/{{ accessKey._id }}/delete/') 削除
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('#{baseUrl}/private/api/v1/users/#{resource._id}')
+        .then(function (response) {
+          const resource = response.data;
+
+          return Q.all([
+            axios.get('#{baseUrl}/private/api/v1/profiles/' + resource.profileId),
+            axios.get('#{baseUrl}/private/api/v1/access-keys/', {
+              params: { userId: resource._id }
+            })
+          ])
+            .then(function (results) {
+              resource.profile = results[0].data;
+              resource.accessKeys = results[1].data;
+
+              resource.memoLines = resource.memo.split('\n');
+
+              var vm = new Vue({
+                data: { resource: resource },
+                template: document.getElementById('template-main').innerText
+              });
+
+              vm.$mount('main');
+            });
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

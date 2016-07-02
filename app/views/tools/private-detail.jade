@@ -1,0 +1,76 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../') ホーム
+      li
+        a(href='../') ツール一覧
+      li.active ツールの詳細
+
+    h1.page-header ツールの詳細
+
+    p.text-right
+      a.btn.btn-warning(href='./edit/') 修正
+      | 
+      a.btn.btn-danger(href='./delete/') 削除
+
+    p.text-right
+      a.btn.btn-default(href='./copy/') コピーして新規登録
+
+    .panel.panel-default
+      .panel-heading 基本情報
+      .panel-body
+        table.table
+          tbody
+            tr
+              th 番号
+              td {{ self.resource.index }}
+            tr
+              th 名称
+              td {{ self.resource.name }}
+            tr
+              th キー
+              td {{ self.resource.key }}
+            tr
+              th メモ
+              td
+                div(v-for='line in self.resource.memoLines') {{ line }}
+
+    hr
+
+    component(is='tool')
+
+    hr
+
+    .row
+      .col-xs-offset-3.col-xs-6
+        a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var ToolDetailPage = window.components.page.ToolDetailPage;
+
+      new ToolDetailPage().initialize({
+        url: '#{baseUrl}/private/api/v1/tools/#{resource._id}'
+      })
+        .then(function (component) {
+          return component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          });
+        })
+        .then(function (options) {
+          var vm = new Vue(options);
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

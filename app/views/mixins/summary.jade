@@ -1,0 +1,3 @@
+mixin summary
+  .well(v-if='self.count === 0') 検索条件に該当するデータは見つかりませんでした
+  .well(v-if='self.count !== 0') 全{{ self.count }}件のうち{{ self.limit * (self.page - 1) + 1 }}件目から{{ self.limit * (self.page - 1) + self.resources.length }}件目までの{{ self.resources.length }}件を表示しています

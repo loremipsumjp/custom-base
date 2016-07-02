@@ -1,0 +1,8 @@
+{
+  "development": {
+    "baseUrl": ""
+  },
+  "production": {
+    "baseUrl": ""
+  }
+}

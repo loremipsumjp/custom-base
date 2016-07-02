@@ -1,0 +1,93 @@
+include ./pagination
+
+ol.breadcrumb
+  li
+    a(href='../') ホーム
+  li #{self.name}
+
+h1.page-header #{self.name}
+
+if self.count === 0 && self.query.q === ''
+  p.well データを登録するには「新規登録」ボタンをクリックしてください
+  p.text-right
+    a.btn.btn-primary(href='./add/') 新規登録
+
+else
+  .panel.panel-default
+    .panel-heading 検索条件
+    .panel-body
+      form
+        .form-group
+          label.control-label(for='q') キーワード
+          input.form-control(type='text', name='q', id='q', v-model='self.form.q')
+        .clearfix
+          button.btn.btn-primary.pull-right(type='submit', v-on:click='onClickSearch') 検索
+
+  .panel.panel-default
+    .panel-heading 並べ替え条件
+    .panel-body
+      .form-group
+        label.control-label(for='sort') 並べ替え
+        select.form-control(for='sort', v-model='self.form.sort', v-on:change='onChangeSort')
+          each option in self.sort.order.options
+            option(value=option.value) #{option.text}
+
+  p.well
+    if self.count === 0
+      | 検索条件に該当するデータは見つかりませんでした
+    else
+      | #{self.count}件のうち#{self.skip + 1}件目から#{self.skip + self.resources.length}件目までの#{self.resources.length}件を表示しています
+
+  .text-right
+    .btn-group
+      a.btn.btn-primary(href='./add/') 新規登録
+      a.btn.btn-primary.dropdown-toggle(data-toggle='dropdown')
+        span.caret
+      ul.dropdown-menu
+        li
+          a(href='./import/') インポート
+        li
+          a(href='./export/') エクスポート
+
+  if self.count > 0
+    +pagination(page=self.page, count=self.count, limit=self.limit)
+
+    .panel.panel-default
+      .panel-heading #{self.table.name}一覧表
+      .panel-body
+        table.table
+          thead
+            tr
+              th #
+              each column in self.columns
+                th #{column.name}
+              th 操作
+          tbody
+            each row, i in rows
+              tr
+                td #{i + 1}
+                each column in row.columns
+                  td !{column.html}
+                td
+                  a.btn.btn-info.btn-xs(href='./#{row.resource._id}/') 詳細
+                  | 
+                  a.btn.btn-warning.btn-xs(href='./#{row.resource._id}/edit/') 修正
+                  | 
+                  a.btn.btn-danger.btn-xs(href='./#{row.resource._id}/delete/') 削除
+                  | 
+                  .btn-group
+                    button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                    ul.dropdown-menu
+                      li
+                        a(href='./#{row.resource._id}/copy/') コピーして新規登録
+                      each format in self.table.formats
+                        li
+                          a(href='./#{row.resource._id}/print/#{format.key}/', target='_blank') #{format.name}の印刷
+
+    +pagination(page=self.page, count=self.count, limit=self.limit)
+
+hr
+
+.row
+  .col-xs-offset-3.col-xs-6
+    a.btn.btn-default.btn-block(href='../') ホームへ戻る

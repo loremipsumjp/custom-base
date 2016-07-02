@@ -1,0 +1,21 @@
+extends ../screen
+
+block header
+  ul.nav.navbar-nav.navbar-right
+    li.dropdoxn
+      a.dropdown-toggle(href='#', data-toggle='dropdown') 長岡 太郎さん <span class="caret"></span>
+      ul.dropdown-menu
+        li
+          a(href='#') パスワードの変更
+        li.divider
+        li
+          a(href='#') ログアウト
+
+block content
+  .row
+    .col-xs-9
+      .main
+        block main
+    .col-xs-3
+      .aside
+        block aside

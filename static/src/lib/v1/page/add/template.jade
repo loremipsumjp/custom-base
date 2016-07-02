@@ -1,0 +1,24 @@
+ol.breadcrumb
+  li
+    a(href='../../') ホーム
+  li
+    a(href='../') #{self.table.name}一覧
+  li.active #{self.name}
+
+h1.page-header {{ self.name }}
+
+form
+  each panel in panels
+    .panel.panel-default
+      .panel-heading #{panel.name}
+      .panel-body
+        each row in panel.rows
+          .form-group
+            label.control-label(for=row.key) #{row.name}
+            != row.input.html
+          .form-group(v-if="self.validation['#{row.key}'].isValid === false")
+            .alert.alert-info {{ self.validation['#{row.key}'].message }}
+
+  .clearfix
+    button.btn.btn-primary.pull-right(type='submit', v-on:click="onClick") この内容で登録する
+    a.btn.btn-default(href='../') 一覧ページへ戻る

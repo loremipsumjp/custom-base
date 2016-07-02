@@ -1,0 +1,45 @@
+extends ../layouts/full-width
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    .row
+      .col-xs-offset-2.col-xs-8
+        h1.page-header ログイン
+        form
+          .alert.alert-info(v-if="self.status === 'unauthorized'") アクセスするにはログインする必要があります
+          .alert.alert-info(v-if="self.status === 'invalid-credentials'") ユーザ名またはパスワードをご確認ください
+          .alert.alert-info(v-if="self.status === 'logout'") ログアウトしました
+          .panel.panel-default
+            .panel-heading ログインフォーム
+            .panel-body
+              .form-group
+                label.control-label(for='username') ユーザ名
+                input.form-control(type='text', name='username', id='username', v-model='self.form.username')
+              .form-group(v-if='self.validation.username === false')
+                .alert.alert-info ユーザ名を入力してください
+              .form-group
+                label.control-label(for='password') パスワード
+                input.form-control(type='password', name='password', id='password', v-model='self.form.password')
+              .form-group(v-if='self.validation.password === false')
+                .alert.alert-info パスワードを入力してください
+          .clear-fix
+            button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') ログイン
+            a.btn.btn-default(href='../../../') トップページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var LoginForm = window.components.LoginForm;
+
+      var component = new LoginForm();
+      var vm = new Vue(component.getVueOptions({
+        template: document.getElementById('template-main').innerText
+      }));
+
+      vm.$mount('main');
+    })();

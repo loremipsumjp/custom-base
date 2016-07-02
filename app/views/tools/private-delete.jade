@@ -1,0 +1,46 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../') ホーム
+      li
+        a(href='../../') ツール一覧
+      li.active ツールの削除
+
+    h1.page-header ツールの削除
+
+    p 削除を実行するには「削除を実行する」ボタンをクリックしてください
+
+    .clearfix
+      button.btn.btn-danger.pull-right(v-on:click='onClick') 削除を実行する
+      a.btn.btn-default(href='../../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var DeletePage = window.components.page.DeletePage;
+
+      new DeletePage().initialize({
+        method: 'DELETE',
+        url: '#{baseUrl}/private/api/v1/tools/#{resource._id}',
+        redirect: '../../',
+      })
+        .then(function (component) {
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

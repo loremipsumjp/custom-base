@@ -1,0 +1,29 @@
+extends ../layouts/two-column
+
+block main
+  main 読み込み中...
+
+block script
+  script.
+    (function () {
+      'use strict';
+  
+      var _ = window._;
+      var Vue = window.Vue;
+      var axios = window.axios;
+
+      axios.get('/private/api/v1/default-pages/#{defaultPage._id}')
+        .then(function (response) {
+          var page = response.data;
+          var PageClass = _.get(window, page.className);
+
+          return new PageClass().initialize(page)
+            .then(function (component) {
+              var vm = new Vue(component.getVueOptions());
+              vm.$mount('main');
+            });
+        })
+        .catch(function (err) {
+          console.error(err.stack);
+        });
+    })();

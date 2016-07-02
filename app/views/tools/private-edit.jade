@@ -1,0 +1,51 @@
+extends ../layouts/two-column
+include ./mixins/form
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../') ホーム
+      li
+        a(href='../../') ツール一覧
+      li.active ツールの修正
+
+    h1.page-header ツールの修正
+
+    form
+      +form
+
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で修正する
+        a.btn.btn-default(href='../../') 一覧ページへ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var FormPage = window.components.page.FormPage;
+      var ToolModel = window.models.ToolModel;
+
+      new FormPage().initialize({
+        ModelClass: ToolModel,
+        resourceUrl: '#{baseUrl}/private/api/v1/tools/#{resource._id}',
+        method: 'PUT',
+        url: '#{baseUrl}/private/api/v1/tools/#{resource._id}',
+        redirect: '../'
+      })
+        .then(function (component) {
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

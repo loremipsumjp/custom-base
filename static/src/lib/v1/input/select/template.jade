@@ -1,0 +1,4 @@
+select.form-control(name=self.key, id=self.key, v-model='#{self.path}.value')
+  option(value='') - クリックして選択 -
+  each option in self.options
+    option(value=option.value) #{option.text}

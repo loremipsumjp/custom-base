@@ -1,0 +1,82 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../../') ホーム
+      li
+        a(href='../../../') ユーザ一覧
+      li
+        a(href='../../') ユーザの詳細
+      li.active アクセスキーの生成
+
+    div(v-if="self.currentView === 'start'")
+      h1.page-header アクセスキーの生成
+
+      form
+        .panel.panel-default
+          .panel-heading 基本情報
+          .panel-body
+            .form-group
+              label.control-label(for='status') 状態
+              select.form-control(name='status', id='status', v-model='self.form.status')
+                option(value='') - クリックして選択 -
+                option(value='active') 有効
+                option(value='inactive') 無効
+            .form-group(v-if='self.validation.status === false')
+              .alert.alert-info ステーテスを選んでください
+            .form-group
+              label.control-label(for='memo') 備考
+              textarea.form-control(rows='10', type='text', name='memo', id='memo', v-model='self.form.memo')
+
+        .clearfix
+          button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で生成する
+          a.btn.btn-default(href='../../') ユーザ詳細へ戻る
+
+    div(v-if="self.currentView === 'finish'")
+      h1.page-header 生成完了
+
+      p.alert.alert-info 認証情報を取得できる最後の機会です
+
+      .panel.panel-default
+        .panel-heading 生成結果
+        .panel-body
+          table.table.table-bordered
+            tbody
+              tr
+                th アクセスキーID
+                td {{ self.accessKey.accessKeyId }}
+              tr
+                th 秘密アクセスキー
+                td {{ self.accessKey.secretAccessKey }}
+
+      hr
+
+      .row
+        .col-xs-offset-3.col-xs-6
+          a.btn.btn-default.btn-block(href='../{{ self.resourceId }}/') 詳細ページへ進む
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var AccessKeyGeneratePage = window.components.page.AccessKeyGeneratePage;
+
+      new AccessKeyGeneratePage().initialize({ userId: '#{user._id}' })
+        .then(function (component) {
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

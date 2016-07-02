@@ -1,0 +1,55 @@
+extends ../layouts/two-column
+include ./mixins/form
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../../../') ホーム
+      li
+        a(href='../../../../') テーブル一覧
+      li
+        a(href='../../../') テーブルの詳細
+      li.active カラムの修正
+
+    h1.page-header カラムの修正
+
+    form
+      +form
+
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で修正する
+        a.btn.btn-default(href='../../../') テーブル詳細へ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var FormPage = window.components.page.FormPage;
+      var ColumnModel = window.models.ColumnModel;
+
+      new FormPage().initialize({
+        ModelClass: ColumnModel,
+        resourceUrl: '#{baseUrl}/private/api/v1/columns/#{resource._id}',
+        method: 'PUT',
+        url: '#{baseUrl}/private/api/v1/columns/#{resource._id}',
+        redirect: '../',
+      })
+        .then(function (component) {
+          component.model.tableId = '#{table._id}';
+
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

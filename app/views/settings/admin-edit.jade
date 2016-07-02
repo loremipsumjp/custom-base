@@ -1,0 +1,21 @@
+extends ../layouts/two-column/admin
+
+block main
+  ol.breadcrumb
+    li
+      a(href='../../../') ホーム
+    li
+      a(href='../../') システム設定一覧
+    li.active システム設定の変更
+
+  h1.page-header システム設定の変更
+
+  .panel.panel-default
+    .panel-heading システム設定フォーム
+    .panel-body
+      .form-group
+        label.control-label(for='value') ここに名称が入ります
+        input.form-control(type='text', name='value', id='value', value='ここにバリューが入ります')
+      .clearfix
+        a.btn.btn-default(href='../../') 一覧ページへ戻る
+        a.btn.btn-primary.pull-right(href='../../') この内容で変更する

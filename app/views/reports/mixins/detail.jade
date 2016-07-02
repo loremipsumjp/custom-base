@@ -1,0 +1,125 @@
+mixin main
+  ol.breadcrumb
+    li
+      a(href='../../') ホーム
+    li
+      a(href='../') レポート一覧
+    li.active レポートの詳細
+
+  h1.page-header レポートの詳細
+
+  table.table
+    tbody
+      tr
+        th 名称
+        td ここに名称が入ります
+      tr
+        th 備考
+        td.
+          ここに備考が入ります <br>
+          ここに備考が入ります <br>
+          ここに備考が入ります <br>
+          ここに備考が入ります <br>
+          ここに備考が入ります
+
+  hr
+
+  .panel.panel-default
+    .panel-heading カスタマイズ
+    .panel-body
+      .form-group
+        label.control-label(for='sort-category') 並べ替え(業種)
+        select.form-control(name='sort-category', id='sort-category')
+          option - クリックして選択 -
+          option(selected) 取引件数の多い順
+          option 取引件数割合の大きい順
+          option 売上の多い順
+          option 売上割合の大きい順
+          option 利益の多い順
+          option 利益割合の大きい順
+      .form-group
+        label.control-label(for='sort-item') 並べ替え
+        select.form-control(name='sort-item', id='sort-item')
+          option - クリックして選択 -
+          option(selected) 取引件数の多い順
+          option 取引件数割合の大きい順
+          option 売上の多い順
+          option 売上割合の大きい順
+          option 利益の多い順
+          option 利益割合の大きい順
+      .form-group
+        label.control-label(for='name') 制限
+        input.form-control(type='text', name='name', id='name', value='ここに会社名が入ります')
+      .clearfix
+        button.btn.btn-primary.pull-right レポートを実行する
+
+  table.table
+    thead
+      tr
+        th 業種
+        th 名称
+        th 取引件数
+        th 割合
+        th 積算
+        th 売上
+        th 割合
+        th 積算
+        th 利益
+        th 割合
+        th 積算
+    tbody
+      each industry in ['鉱業', '建設業', '食料品', '繊維製品', 'パルプ・紙']
+        tr.info
+          td #{industry}
+          td 小計
+          td 200
+          td 20%
+          td -
+          td &yen;20,000,000
+          td 20%
+          td -
+          td &yen;2,000,000
+          td 20%
+          td -
+        - for (var i = 100; i >= 10; i -= 10)
+          tr
+            td &nbsp;
+            td
+              span(data-toggle='tooltip', title='ここに名称が入ります') ここに名称&hellip;
+            td 10
+            td 10%
+            td #{i}
+            td &yen;2,000,000
+            td 10%
+            td #{i}
+            td &yen;200,000
+            td 10%
+            td #{i}
+      tr.success
+          td 合計
+          td &nbsp;
+          td 1000
+          td 100%
+          td -
+          td &yen;100,000,000
+          td 100%
+          td -
+          td &yen;10,000,000
+          td 100%
+          td -
+
+  hr
+
+  .row
+    .col-xs-offset-3.col-xs-6
+      a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
+
+
+
+mixin script
+  script.
+    (function () {
+      'use strict';
+
+      $('[data-toggle="tooltip"]').tooltip()
+    })()

@@ -1,0 +1,81 @@
+extends ../layouts/two-column/admin
+
+block main
+  ol.breadcrumb
+    li
+      a(href='../') ホーム
+    li システム設定一覧
+
+  h1.page-header システム設定一覧
+
+  .panel.panel-default
+    .panel-heading 全般
+    .panel-body
+      - var i = 0
+      table.table
+        thead
+          tr
+            th #
+            th 名称
+            th 操作
+        tbody
+          tr
+            td #{i += 1}
+            td システム設定の分類
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+
+  .panel.panel-default
+    .panel-heading レイアウト
+    .panel-body
+      - var i = 0
+      table.table
+        thead
+          tr
+            th #
+            th 名称
+            th 操作
+        tbody
+          tr
+            td #{i += 1}
+            td システムの名称
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+          tr
+            td #{i += 1}
+            td システムの著作権表示
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+          tr
+            td #{i += 1}
+            td 追加のスタイル
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+          tr
+            td #{i += 1}
+            td 追加のスクリプト
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+
+  .panel.panel-default
+    .panel-heading HTML
+    .panel-body
+      - var i = 0
+      table.table
+        thead
+          tr
+            th #
+            th 名称
+            th 操作
+        tbody
+          tr
+            td #{i += 1}
+            td トップページ
+            td
+              a.btn.btn-warning.btn-xs(href='./1/edit/') 変更
+
+  hr
+
+  .row
+    .col-xs-offset-3.col-xs-6
+      a.btn.btn-default.btn-block(href='../') ホームへ戻る

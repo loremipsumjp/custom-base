@@ -1,0 +1,43 @@
+mixin form
+  .panel.panel-default
+    .panel-heading 基本情報
+    .panel-body
+      .form-group
+        label.control-label(for='index') 番号
+        input.form-control(type='number', name='index', id='index', v-model='self.model.form.index')
+      .form-group(v-if='self.model.validation.index === false')
+        .alert.alert-info 番号を正しく入力してください
+      .form-group
+        label.control-label(for='profileId') 権限
+        select.form-control(name='profileId', id='profileId', v-model='self.model.form.profileId')
+          option(value='') - クリックして選択 -
+          option(v-for='profile in self.model.options.profiles', v-bind:value='profile._id') {{ profile.name }}
+      .form-group(v-if='self.model.validation.profileId === false')
+        .alert.alert-info 権限を選んでください
+      .form-group
+        label.control-label(for='username') ユーザ名
+        input.form-control(type='text', name='username', id='username', v-model='self.model.form.username')
+      .form-group(v-if='self.model.validation.username === false')
+        .alert.alert-info ユーザ名を入力してください
+      .form-group
+        label.control-label(for='password') パスワード
+        .checkbox(v-if="self.method === 'PUT'")
+          label
+            input(type='checkbox', name='passwordChange', id='passwordChange', v-model='self.model.form.passwordChange')
+            | パスワードを変更する
+        input.form-control(v-if="self.model.form.passwordChange === true", type='password', name='password', id='password', v-model='self.model.form.password')
+      .form-group(v-if='self.model.validation.password === false')
+        .alert.alert-info パスワードを入力してください
+      .form-group
+        label.control-label(for='name') 氏名
+        input.form-control(type='text', name='name', id='name', v-model='self.model.form.name')
+      .form-group(v-if='self.model.validation.name === false')
+        .alert.alert-info 氏名を入力してください
+      .form-group
+        label.control-label(for='kana') 氏名(カタカナ)
+        input.form-control(type='text', name='kana', id='kana', v-model='self.model.form.kana')
+      .form-group(v-if='self.model.validation.kana === false')
+        .alert.alert-info 氏名(カタカナ)を入力してください
+      .form-group
+        label.control-label(for='memo') 備考
+        textarea.form-control(rows='10', type='text', name='memo', id='memo', v-model='self.model.form.memo')

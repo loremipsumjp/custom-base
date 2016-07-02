@@ -1,0 +1,14 @@
+ol.breadcrumb
+  li
+    a(href='../../../') ホーム
+  li
+    a(href='../../') #{self.table.name}一覧
+  li.active #{self.name}
+
+h1.page-header #{self.name}
+
+p 削除を実行するには「削除を実行する」ボタンをクリックしてください
+
+.clearfix
+  button.btn.btn-danger.pull-right(v-on:click='onClick') 削除を実行する
+  a.btn.btn-default(href='../../') 一覧ページへ戻る

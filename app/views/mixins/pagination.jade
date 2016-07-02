@@ -1,0 +1,75 @@
+mixin pagination
+  .text-center
+    // ul.pagination(v-if='Math.ceil(self.count / self.limit) <= 15')
+    ul.pagination
+      li.disabled(v-if='self.page === 1')
+        a &laquo;
+      li(v-if='self.page !== 1')
+        a(href='#', v-on:click='onClickPage($event, self.page - 1)') &laquo;
+
+      li(v-for='i in Math.ceil(self.count / self.limit)', v-bind:class="{ 'active': self.page === i + 1 }")
+        a(v-if='self.page === i + 1') {{ i + 1 }}
+        a(v-if='self.page !== i + 1' href='#', v-on:click='onClickPage($event, i + 1)') {{ i + 1 }}
+
+      li.disabled(v-if='self.page === Math.ceil(self.count / self.limit)')
+        a &raquo;
+      li(v-if='self.page !== Math.ceil(self.count / self.limit)')
+        a(href='#', v-on:click='onClickPage($event, self.page + 1)') &raquo;
+
+      //- else
+      //-   if page <= 8
+      //-     - for (var i = 1; i <= 13; i += 1)
+      //-       if page === i
+      //-         li.active
+      //-           a #{i}
+      //-       else
+      //-         li
+      //-           a(href='#', v-on:click='onClickPage($event, #{i})') #{i}
+      //-     li
+      //-       a &hellip;
+      //-     if page === max
+      //-       li.active
+      //-         a #{i}
+      //-     else
+      //-       li
+      //-         a(href='#', v-on:click='onClickPage($event, #{max})') #{max}
+      //-   else if page >= max - 7
+      //-     if page === 1
+      //-       li.active
+      //-         a 1
+      //-     else
+      //-       li
+      //-         a(href='#', v-on:click='onClickPage($event, 1)') 1
+      //-     li
+      //-       a &hellip;
+      //-     - for (var i = max - 12; i <= max; i += 1)
+      //-       if page === i
+      //-         li.active
+      //-           a #{i}
+      //-       else
+      //-         li
+      //-           a(href='#', v-on:click='onClickPage($event, #{i})') #{i}
+      //-   else
+      //-     if page === 1
+      //-       li.active
+      //-         a 1
+      //-     else
+      //-       li
+      //-         a(href='#', v-on:click='onClickPage($event, 1)') 1
+      //-     li
+      //-       a &hellip;
+      //-     - for (var i = page - 5; i <= page + 5; i += 1)
+      //-       if page === i
+      //-         li.active
+      //-           a #{i}
+      //-       else
+      //-         li
+      //-           a(href='#', v-on:click='onClickPage($event, #{i})') #{i}
+      //-     li
+      //-       a &hellip;
+      //-     if page === max
+      //-       li.active
+      //-         a #{i}
+      //-     else
+      //-       li
+      //-         a(href='#', v-on:click='onClickPage($event, #{max})') #{max}

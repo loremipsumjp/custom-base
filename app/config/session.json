@@ -1,0 +1,20 @@
+{
+  "development": {
+    "name": "connect.sid",
+    "proxy": true,
+    "resave": true,
+    "rolling": true,
+    "saveUninitialized": false,
+    "secret": ["session-secret"],
+    "unset": "keep"
+  },
+  "production": {
+    "name": "connect.sid",
+    "proxy": true,
+    "resave": true,
+    "rolling": true,
+    "saveUninitialized": false,
+    "secret": ["session-secret"],
+    "unset": "keep"
+  }
+}

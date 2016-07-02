@@ -1,0 +1,6 @@
+if self.value
+  .checkbox
+    label
+      input(type='checkbox', v-model='#{self.path}.change')
+      | パスワードを変更する
+input.form-control(type='password', name=self.key, id=self.key, v-model='#{self.path}.value', v-show='#{self.path}.change === true')

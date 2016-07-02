@@ -1,0 +1,19 @@
+table.table
+  thead
+    tr
+      each column in self.columns
+        th #{column.name}
+  tbody
+    each row in rows
+      tr
+        each column in row.columns
+          td !{column.html}
+  tfoot
+    tr
+      each column in footer.columns
+        if column.stats.length === 0
+          td &nbsp;
+        else
+          td
+            each stat in column.stats
+              div #{stat.name} !{stat.html}

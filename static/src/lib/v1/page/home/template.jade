@@ -1,0 +1,10 @@
+h1.page-header ホーム
+
+each row in rows
+  .row
+    each column in row.columns
+      div(class=column.css || ('col-xs-' + (12 / row.columns.length)))
+        each panel in column.panels
+          .panel.panel-default
+            .panel-heading #{panel.name}
+            .panel-body !{panel.widget.html}

@@ -1,0 +1,65 @@
+extends ../layouts/two-column
+
+block main
+  main
+
+  script(type='text/template', id='template-main')
+    ol.breadcrumb
+      li
+        a(href='../../../../../') ホーム
+      li
+        a(href='../../../../') ユーザ一覧
+      li
+        a(href='../../../') ユーザの詳細
+      li.active アクセスキーの修正
+
+    h1.page-header アクセスキーの修正
+
+    form
+      .panel.panel-default
+        .panel-heading 基本情報
+        .panel-body
+          .form-group
+            label.control-label(for='status') 状態
+            select.form-control(name='status', id='status', v-model='self.model.form.status')
+              option(value='') - クリックして選択 -
+              option(value='active') 有効
+              option(value='inactive') 無効
+          .form-group(v-if='self.model.validation.status === false')
+            .alert.alert-info ステーテスを選んでください
+          .form-group
+            label.control-label(for='memo') 備考
+            textarea.form-control(rows='10', type='text', name='memo', id='memo', v-model='self.model.form.memo')
+
+      .clearfix
+        button.btn.btn-primary.pull-right(type='submit', v-on:click='onClick') この内容で修正する
+        a.btn.btn-default(href='../../../') ユーザ詳細へ戻る
+
+block script
+  script.
+    (function () {
+      'use strict';
+
+      var Vue = window.Vue;
+      var axios = window.axios;
+      var FormPage = window.components.page.FormPage;
+      var AccessKeyModel = window.models.AccessKeyModel;
+
+      new FormPage().initialize({
+        ModelClass: AccessKeyModel,
+        resourceUrl: '#{baseUrl}/private/api/v1/access-keys/#{resource._id}',
+        method: 'PUT',
+        url: '#{baseUrl}/private/api/v1/access-keys/#{resource._id}',
+        redirect: '../',
+      })
+        .then(function (component) {
+          var vm = new Vue(component.getVueOptions({
+            template: document.getElementById('template-main').innerText
+          }));
+
+          vm.$mount('main');
+        })
+        .catch(function (err) {
+          console.error(err.stack || err);
+        });
+    })();

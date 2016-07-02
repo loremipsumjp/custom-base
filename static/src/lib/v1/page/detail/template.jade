@@ -1,0 +1,77 @@
+ol.breadcrumb
+  li
+    a(href='../../') ホーム
+  li
+    a(href='../') #{self.table.name}一覧
+  li.active #{self.name}
+
+h1.page-header #{self.name}
+
+p.text-right
+  a.btn.btn-warning(href='./edit/') 修正
+  | 
+  a.btn.btn-danger(href='./delete/') 削除
+  | 
+  a.btn.btn-default(href='./copy/') コピーして新規登録
+
+p.text-right
+  each format in self.table.formats
+    a.btn.btn-default(href='./print/#{format.key}/', target='_blank') #{format.name}の印刷
+    | 
+
+each panel in panels
+  .panel.panel-default
+    .panel-heading #{panel.name}
+    .panel-body
+      table.table.table-bordered
+        tbody
+          each row in panel.rows
+            tr
+              th #{row.name}
+              td !{row.html}
+
+each list in lists
+  hr
+
+  h2 #{list.name}
+
+  p.text-right
+    a.btn.btn-primary(href='../../#{list.table.key}/add/?#{list.column.key}=#{self.resource._id}') #{list.table.name}の新規登録
+
+  .panel.panel-default
+    .panel-heading #{list.name}一覧表
+    .panel-body
+      table.table
+        thead
+          tr
+            th #
+            each header in list.headers
+              th #{header}
+            th 操作
+        tbody
+          each row, i in list.rows
+            tr
+              td #{i + 1}
+              each column in row.columns
+                td !{column.html}
+              td
+                a.btn.btn-info.btn-xs(href='../../#{list.table.key}/#{row.resource._id}/') 詳細
+                | 
+                a.btn.btn-warning.btn-xs(href='../../#{list.table.key}/#{row.resource._id}/edit/') 修正
+                | 
+                a.btn.btn-danger.btn-xs(href='../../#{list.table.key}/#{row.resource._id}/delete/') 削除
+                | 
+                .btn-group
+                  button.btn.btn-default.btn-xs.dropdown-toggle(data-toggle='dropdown') <span class="caret"></span>
+                  ul.dropdown-menu
+                    li
+                      a(href='../../#{list.table.key}/#{row.resource._id}/copy/') コピーして新規登録
+                    each format in list.table.formats
+                      li
+                        a(href='../../#{list.table.key}/#{row.resource._id}/print/#{format.key}/', target='_blank') #{format.name}の印刷
+
+hr
+
+.row
+  .col-xs-offset-3.col-xs-6
+    a.btn.btn-default.btn-block(href='../') 一覧ページへ戻る
